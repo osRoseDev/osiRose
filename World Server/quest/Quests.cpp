@@ -1,11 +1,11 @@
 // Props to ExJam for this code :D
 #include "../WorldServer.h"
 
-void CWorldServer::ReadQSD(strings path, dword index){	
+void CWorldServer::ReadQSD(strings path, dword index){
 	CRoseFile* fh = new CRoseFile(path, FM_READ | FM_BINARY);
 	if(fh->IsOpen()) { // goto done;
 
-	Log(MSG_LOAD, "Loading %s                              ", path);
+	Log(MSG_LOADFILE, "QSD load: %s", path);
 
 	fh->Seek(4, SEEK_CUR);
 	dword BlockCount = fh->Get<dword>();
@@ -58,14 +58,14 @@ void CWorldServer::ReadQSD(strings path, dword index){
 	}
 }else
      Log( MSG_ERROR, "QSD File: '%s'", path );
-     
+
     fh->Close();
 	delete fh;
 }
 
 void CWorldServer::LoadQuestData(){
 	CStrStb* stbQuest = new CStrStb("3DDATA\\STB\\LIST_QUESTDATA.STB");
-	
+
 	for(dword i = 1; i < stbQuest->Rows(); i++){
 		if(stbQuest->Data(i, 0)){
 			GServer->ReadQSD(stbQuest->Data(i, 0),i);

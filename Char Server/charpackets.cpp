@@ -1,22 +1,22 @@
 /*
     Rose Online Server Emulator
     Copyright (C) 2006,2007 OSRose Team http://osroseon.to.md
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-    developed with Main erose/hrose source server + some change from the original eich source        
+    developed with Main erose/hrose source server + some change from the original eich source
 */
 #include "charserver.h"
 
@@ -30,7 +30,7 @@ bool CCharServer::pakDoIdentify( CCharClient* thisclient, CPacket* P )
 	memcpy( thisclient->password, &P->Buffer[4], 32 );
 	result = DB->QStore("SELECT username,lastsvr,accesslevel,platinum FROM accounts WHERE id=%i AND password='%s'", thisclient->userid, thisclient->password);
 	if(result==NULL) return false;
-	if (mysql_num_rows( result ) != 1) 
+	if (mysql_num_rows( result ) != 1)
     {
 		Log( MSG_HACK, "Someone tried to connect to char server with an invalid account" );
 		DB->QFree( );
@@ -54,10 +54,10 @@ bool CCharServer::pakDoIdentify( CCharClient* thisclient, CPacket* P )
 	ADDDWORD   ( pak, 0x00000000 );
 	thisclient->SendPacket( &pak );
 	result = DB->QStore( "SELECT online FROM accounts WHERE username='%s'", thisclient->username );
-    if(result==NULL) return false;	
+    if(result==NULL) return false;
     row = mysql_fetch_row(result);
     bool online = atoi(row[0]);
-    DB->QFree( );    
+    DB->QFree( );
     if(online)
         return false;
     if(!DB->QExecute( "UPDATE accounts SET online=1 WHERE username='%s'", thisclient->username ))
@@ -80,11 +80,11 @@ bool CCharServer::pakGetCharacters( CCharClient* thisclient, CPacket* P )
 
 	CItem items[10];
 	unsigned int charnum=0;
-	CCharacter chars[5];    
+	CCharacter chars[5];
 	            //        0       1      2    3      4      5     6      7
 	result = DB->QStore("SELECT char_name,level,face,hairStyle,sex,classid,id,deletetime FROM characters WHERE account_name='%s'", thisclient->username);
 	if(result==NULL) return false;
-	while (row = mysql_fetch_row(result)) 
+	while (row = mysql_fetch_row(result))
     {
         strcpy( chars[charnum].char_name , row[0] );
 		chars[charnum].level = atoi(row[1]);
@@ -93,24 +93,24 @@ bool CCharServer::pakGetCharacters( CCharClient* thisclient, CPacket* P )
 		chars[charnum].sex = atoi(row[4]);
 		chars[charnum].classid = atoi(row[5]);
 		chars[charnum].id = atoi(row[6]);
-        chars[charnum].DeleteTime = atoi(row[7]);		
+        chars[charnum].DeleteTime = atoi(row[7]);
 		if(chars[charnum].DeleteTime > 0)
 		{
-            chars[charnum].DeleteTime = chars[charnum].DeleteTime - GetServerTime( );    						
+            chars[charnum].DeleteTime = chars[charnum].DeleteTime - GetServerTime( );
         }
 		charnum++;
 	}
 	DB->QFree( );
-	BEGINPACKET( pak, 0x0712 );	
+	BEGINPACKET( pak, 0x0712 );
 	ADDBYTE    ( pak, charnum );
-	for (unsigned k=0;k<charnum;k++) 
+	for (unsigned k=0;k<charnum;k++)
     {
-		for(unsigned j=0; j<10; j++) 
+		for(unsigned j=0; j<10; j++)
             ClearItem( items[j] );
                     //       0       1      2         3         4        5
 		result = DB->QStore("SELECT itemnum,itemtype,refine,durability,lifespan,slotnum FROM items WHERE owner=%i AND slotnum<10", chars[k].id);
 		if(result==NULL) return false;
-		while(row = mysql_fetch_row(result)) 
+		while(row = mysql_fetch_row(result))
         {
 			unsigned itemnum = atoi(row[5]);
 			items[itemnum].itemnum = atoi(row[0]);
@@ -141,7 +141,7 @@ bool CCharServer::pakGetCharacters( CCharClient* thisclient, CPacket* P )
 		ADDWORD   ( pak, items[1].itemnum );		// FACE
 		ADDWORD   ( pak, items[1].refine );		// FACE REFINE
 		ADDWORD   ( pak, items[4].itemnum );		// BACK
-		ADDWORD   ( pak, items[4].refine );		// BACK REFINE 
+		ADDWORD   ( pak, items[4].refine );		// BACK REFINE
 		ADDWORD   ( pak, items[7].itemnum );		// WEAPON
 		ADDWORD   ( pak, items[7].refine );		// WEAPON REFINE
 		ADDWORD   ( pak, items[8].itemnum );		// SUBWEAPON
@@ -163,14 +163,14 @@ bool CCharServer::pakRequestWorld( CCharClient* thisclient, CPacket* P )
 	if(!DB->QExecute("UPDATE accounts SET lastchar='%s' WHERE id=%i", thisclient->charname, thisclient->userid))
 	   return false;
 	result = DB->QStore("SELECT host,port FROM channels WHERE id=%i", thisclient->channel);
-	if(result==NULL) return false;	   
+	if(result==NULL) return false;
 	if(mysql_num_rows( result )!=1 )
 	{
         Log( MSG_WARNING, "Invalid Server: %i", thisclient->channel );
         DB->QFree( );
-	    return false;	
+	    return false;
     }
-	row = mysql_fetch_row( result );	
+	row = mysql_fetch_row( result );
 	BEGINPACKET( pak, 0x711 );
 	ADDWORD    ( pak, atoi(row[1]) );                // PORT
 	ADDDWORD   ( pak, thisclient->userid );
@@ -178,7 +178,7 @@ bool CCharServer::pakRequestWorld( CCharClient* thisclient, CPacket* P )
     ADDSTRING  ( pak, row[0] );//IP
 	ADDBYTE    ( pak, 0 );
 	thisclient->SendPacket( &pak );
-	DB->QFree( );   
+	DB->QFree( );
 //CHAR INFORMATION        0       1    2    3      4
 	result = DB->QStore("SELECT clanid,clan_rank,id,level,classid FROM characters WHERE char_name='%s'", thisclient->charname);
 	if(result==NULL) return false;
@@ -187,19 +187,19 @@ bool CCharServer::pakRequestWorld( CCharClient* thisclient, CPacket* P )
         Log( MSG_WARNING, "Number of user with charname '%s' is %i", thisclient->charname,mysql_num_rows(result));
         DB->QFree( );
         return false;
-    }		
-	row = mysql_fetch_row( result );	
+    }
+	row = mysql_fetch_row( result );
 	thisclient->clanid =  atoi( row[0] );
 	thisclient->clan_rank = atoi( row[1] );
 	thisclient->charid = atoi( row[2] );
 	thisclient->level = atoi( row[3] );
 	thisclient->job = atoi( row[4] );
-	DB->QFree( );   
+	DB->QFree( );
 //MESSENGER INFORMATION
 //              //          0        1
 	result = DB->QStore("SELECT idfriend,namefriend FROM list_friend WHERE id=%i", thisclient->charid);
 	if(result==NULL) return false;
-	BYTE nfriends = mysql_num_rows(result) & 0xff;	
+	BYTE nfriends = mysql_num_rows(result) & 0xff;
 
 	RESETPACKET( pak, 0x7e1 );// Friend list command
     ADDBYTE    ( pak, 0x06 );// Sending Friend List
@@ -207,33 +207,33 @@ bool CCharServer::pakRequestWorld( CCharClient* thisclient, CPacket* P )
 	while(row = mysql_fetch_row( result ))
 	{
         CFriendList * newfriend = new CFriendList;
-        assert(newfriend);                       
+        assert(newfriend);
         newfriend->id = atoi(row[0]); //friendid
         strcpy(newfriend->name, row[1]); //friend name
         thisclient->FriendList.push_back( newfriend );
-        ADDWORD    (pak, newfriend->id);// friend id       
+        ADDWORD    (pak, newfriend->id);// friend id
         ADDWORD    (pak, 0x0000 );
         CCharClient* otherclient = (CCharClient*) GetClientByID( newfriend->id );
         if(otherclient!=NULL) //is online??
         {
             ADDBYTE    (pak, 0x07 );   //online
-            ChangeMessengerStatus ( thisclient, otherclient, 0x07);                         
+            ChangeMessengerStatus ( thisclient, otherclient, 0x07);
         }
         else
         {
             ADDBYTE    (pak, 0x08 );//offline
         }
         ADDSTRING  (pak, newfriend->name); //friend name
-        ADDBYTE    (pak, 0x00 );          
+        ADDBYTE    (pak, 0x00 );
     }
-    thisclient->SendPacket( &pak );      
-	DB->QFree( );    
-    thisclient->logout = false;    
-    
+    thisclient->SendPacket( &pak );
+	DB->QFree( );
+    thisclient->logout = false;
+
     //SEND CLAN INFORMATION
-    SendClanInfo (thisclient);    	
-    
-    return true;        
+    SendClanInfo (thisclient);
+
+    return true;
 }
 
 // Create a character
@@ -249,7 +249,7 @@ bool CCharServer::pakCreateChar( CCharClient* thisclient, CPacket* P )
 	MYSQL_RES *result;
 	result = DB->QStore("SELECT id FROM characters WHERE account_name='%s'", thisclient->username);
 	if(result==NULL) return false;
-	if ( mysql_num_rows( result ) == 5 ) 
+	if ( mysql_num_rows( result ) == 5 )
     {
         STARTPACKET( pak, 0x0713, 8 );
         SETWORD    ( pak, 0x00,   4 )
@@ -260,7 +260,7 @@ bool CCharServer::pakCreateChar( CCharClient* thisclient, CPacket* P )
 	DB->QFree( );
 	result = DB->QStore("SELECT id FROM characters WHERE char_name='%s'", newname.c_str());
     if(result==NULL) return false;
-	if ( mysql_num_rows( result ) > 0 ) 
+	if ( mysql_num_rows( result ) > 0 )
     {
 		STARTPACKET( pak, 0x0713, 8 );
 		SETWORD    ( pak, 0x00,   2 );
@@ -272,8 +272,8 @@ bool CCharServer::pakCreateChar( CCharClient* thisclient, CPacket* P )
 
 	if(!DB->QExecute("INSERT INTO characters (account_name, char_name, face, hairStyle, sex) VALUES('%s','%s',%i,%i,%i)", thisclient->username, newname.c_str(), face, hairstyle, sex))
 	   return false;
-	unsigned int mid = (unsigned)mysql_insert_id( DB->Mysql );    
-    MYSQL_ROW row;        
+	unsigned int mid = (unsigned)mysql_insert_id( DB->Mysql );
+    MYSQL_ROW row;
 	if(!DB->QExecute("INSERT INTO items VALUES(%i,30,3,0,40,100,3,1,0,0,0,0)", mid))
 		return false;
 	if(!DB->QExecute("INSERT INTO items VALUES(%i,1,8,0,40,100,7,1,0,0,0,0)", mid))
@@ -287,7 +287,7 @@ bool CCharServer::pakCreateChar( CCharClient* thisclient, CPacket* P )
 	{
 	    if(!DB->QExecute("INSERT INTO items VALUES(%i,221,2,0,40,100,12,1,0,0,0,0)", mid))
 	    	return false;
-         }	
+         }
 	STARTPACKET( pak, 0x0713, 8 );
 	SETWORD    ( pak, 0x00,   0 );
 	thisclient->SendPacket( &pak );
@@ -297,30 +297,30 @@ bool CCharServer::pakCreateChar( CCharClient* thisclient, CPacket* P )
 
 // Connect WorldServer
 bool CCharServer::pakWSReady ( CCharClient* thisclient, CPacket* P )
-{    
+{
 
 	if(thisclient->isLoggedIn) return false;
-	if(GETDWORD((*P),0) != Config.CharPass ) 	
+	if(GETDWORD((*P),0) != Config.CharPass )
     {
-        Log( MSG_HACK, "WorldServer Tried to connect CharServer with wrong password ");        
+        Log( MSG_HACK, "WorldServer Tried to connect CharServer with wrong password ");
         return true;
     }
     thisclient->userid = GETDWORD((*P), 4); //our channelid
-    thisclient->accesslevel = 0xffff; //this will identify thisclient as channel        
+    thisclient->accesslevel = 0xffff; //this will identify thisclient as channel
 
     // add channel
-    CChanels* newchannel = new (nothrow) CChanels;    
+    CChanels* newchannel = new (nothrow) CChanels;
     if(newchannel==NULL)
         return false;
 
     newchannel->id = GETDWORD((*P), 4);
     newchannel->ip = inet_ntoa( thisclient->clientinfo.sin_addr );
-    newchannel->port = GETWORD((*P),8 );            
+    newchannel->port = GETWORD((*P),8 );
     Log( MSG_INFO, "Channel #%i connected from ip %s", newchannel->id, newchannel->ip );
 
     // Connect to charserver
 	newchannel->sock = socket( AF_INET, SOCK_STREAM, 0 );
-	if (newchannel->sock == INVALID_SOCKET) 
+	if (newchannel->sock == INVALID_SOCKET)
     {
 		Log( MSG_WARNING, "Could not access worldserver IP: %s , Port: %i", newchannel->ip, newchannel->port );
 		delete newchannel;
@@ -331,14 +331,14 @@ bool CCharServer::pakWSReady ( CCharClient* thisclient, CPacket* P )
    	ain.sin_addr.s_addr	= inet_addr(newchannel->ip);
 	ain.sin_port		= htons( newchannel->port );
 	memset(&(ain.sin_zero), '\0', 8);
-	if ( connect( newchannel->sock , (SOCKADDR*) &ain, sizeof(ain) ) == SOCKET_ERROR) 
+	if ( connect( newchannel->sock , (SOCKADDR*) &ain, sizeof(ain) ) == SOCKET_ERROR)
     {
 		Log( MSG_WARNING, "Could not access worldserver IP: %s , Port: %i", newchannel->ip , newchannel->port );
 		delete newchannel;
 		return false;
-	}        	
-    ChannelList.push_back( newchannel );	
-	
+	}
+    ChannelList.push_back( newchannel );
+
 	thisclient->isLoggedIn = true;
 	BEGINPACKET( pak, 0x500 );
     ADDDWORD   ( pak, Config.WorldPass );
@@ -347,47 +347,60 @@ bool CCharServer::pakWSReady ( CCharClient* thisclient, CPacket* P )
 	Log( MSG_INFO, "Accessing worldserver IP: %s , Port: %i", newchannel->ip , newchannel->port );
 	send( newchannel->sock, (char*)&pak, pak.Size, 0 );
 	return true;
-	
+
 }
 
 // Login Connected
 bool CCharServer::pakLoginConnected( CCharClient* thisclient, CPacket* P )
 {
 	if(thisclient->isLoggedIn) return false;
-	if(GETDWORD((*P),0) != Config.CharPass ) 	
+	if(GETDWORD((*P),0) != Config.CharPass )
     {
-         Log( MSG_HACK, "LoginServer Tried to connect CharServer with wrong password ");        
+         Log( MSG_HACK, "LoginServer Tried to connect CharServer with wrong password ");
          return true;
     }
-	thisclient->isLoggedIn = true;    
+	thisclient->isLoggedIn = true;
     return true;
 }
 
-// Return to char select 
+// Return to char select
 bool CCharServer::pakWSCharSelect ( CCharClient* thisclient, CPacket* P )
 {
-	//if(!thisclient->isLoggedIn) return false;    
-	Log( MSG_INFO, "World server requested char select" );
+	if(!thisclient->isLoggedIn) return false;
 
+	/// Get Current User ID and setup a new Client (because client came from WS)
 	unsigned int userid = GETDWORD( (*P), 0 );
+	Log( MSG_INFO, "World server requested char select for user: %1",userid );
 	CCharClient* otherclient = GetClientByUserID( userid );
+
 	if(otherclient==NULL)
 	{
         Log(MSG_WARNING, "Invalid userid: %i", userid );
 	    return true;
     }
-	BEGINPACKET( pak, 0x71c );
-	//ADDBYTE    ( pak, 0x00 );
-	otherclient->SendPacket( &pak ); 
-    Log( MSG_INFO, "Client returning to char select" );        
+
+    /// Notify the client of server change.
+    Log(MSG_INFO, "Client Notify that server has changed.");
+	BEGINPACKET( pak, 0x071c );              /// CLI_CHAR_CHANGE 0x071c
+	//ADDBYTE    ( pak, 0x00 );              // Had to remove this byte to prevent client crashing.
+	otherclient->SendPacket( &pak );
+
+    Log( MSG_INFO, "Client has returned to char select" );
+
+    /// Send Notify     0x505 WSCharSelect
+    RESETPACKET(pak,0x505);
+    ADDWORD(pak,thisclient->userid);
+    SendISCPacket(&pak);
+
+    //MISSING: DisconnectClientFromChat()
 	return true;
 }
 
-// ???
+// ??? Mail system.
 bool CCharServer::pak7e5 ( CCharClient* thisclient, CPacket* P )
 {
     BEGINPACKET( pak, 0 );
-	if(!thisclient->isLoggedIn) return false;           
+	if(!thisclient->isLoggedIn) return false;
     unsigned int action = GETBYTE((*P),0);
     switch(action)
     {
@@ -406,14 +419,14 @@ bool CCharServer::pak7e5 ( CCharClient* thisclient, CPacket* P )
 // Create a chatroom?
 bool CCharServer::pakChatrooms ( CCharClient* thisclient, CPacket* P )
 {
-	if(!thisclient->isLoggedIn) return false;       
+	if(!thisclient->isLoggedIn) return false;
     return true;
 }
 
 // delete/resurect character
 bool CCharServer::pakDeleteChar( CCharClient* thisclient, CPacket* P )
 {
-	if(!thisclient->isLoggedIn) return false;    
+	if(!thisclient->isLoggedIn) return false;
     short int action = GETBYTE((*P), 1 );
     unsigned long int DeleteTime = 0;
     switch(action)
@@ -421,7 +434,7 @@ bool CCharServer::pakDeleteChar( CCharClient* thisclient, CPacket* P )
         case 0x00://Resurect
         {
             DeleteTime = 0;
-            if(!DB->QExecute(" UPDATE characters SET deletetime=0 WHERE char_name='%s'", 
+            if(!DB->QExecute(" UPDATE characters SET deletetime=0 WHERE char_name='%s'",
                     (char*)&P->Buffer[2] ))
                 return false;
         }
@@ -429,15 +442,15 @@ bool CCharServer::pakDeleteChar( CCharClient* thisclient, CPacket* P )
         case 0x01://Delete
         {
             DeleteTime = GetServerTime( ) + Config.DeleteTime;
-            if(!DB->QExecute(" UPDATE characters SET deletetime=%i WHERE char_name='%s'", 
+            if(!DB->QExecute(" UPDATE characters SET deletetime=%i WHERE char_name='%s'",
                     DeleteTime, (char*)&P->Buffer[2] ))
                 return false;
-       
+
         }
         break;
     }
     BEGINPACKET( pak, 0x714 );
-    if(DeleteTime > 0 ) 
+    if(DeleteTime > 0 )
     {
         ADDDWORD   ( pak, Config.DeleteTime );
     }
@@ -447,13 +460,13 @@ bool CCharServer::pakDeleteChar( CCharClient* thisclient, CPacket* P )
     }
     ADDSTRING  ( pak, (char*)&P->Buffer[2] );
     ADDBYTE    ( pak, 0x00 );
-    thisclient->SendPacket( &pak );         
+    thisclient->SendPacket( &pak );
     return true;
 }
 
 bool CCharServer::pakUpdateLevel( CCharClient* thisclient, CPacket* P )
 {
-    if(!thisclient->isLoggedIn) return false;    
+    if(!thisclient->isLoggedIn) return false;
     WORD charid = GETWORD((*P),0);
     WORD level = GETWORD((*P),2);
     for(UINT i=0;i<ClientList.size();i++)
@@ -471,13 +484,13 @@ bool CCharServer::pakUpdateLevel( CCharClient* thisclient, CPacket* P )
 // Disconnect client from char/world server
 bool CCharServer::pakLoginDSClient( CCharClient* thisclient, CPacket* P )
 {
-    
+
     if(!thisclient->isLoggedIn) return false;
     BYTE action = GETBYTE((*P),0);
     switch(action)
     {
         case 1:
-        {            
+        {
             unsigned int userid = GETDWORD ((*P), 1);
             CCharClient* otherclient = GetClientByUserID( userid );
             if(otherclient==NULL)
@@ -497,6 +510,6 @@ bool CCharServer::pakLoginDSClient( CCharClient* thisclient, CPacket* P )
      	    else { Log(MSG_ERROR, "Check serverid in worldserver.conf it should be the same as ID in channels in the mysql database %i",thisclient->channel);}
         }
         break;
-    } 
+    }
     return true;
 }

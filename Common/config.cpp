@@ -1,7 +1,7 @@
 /*******************************************************************************************
-      ___  ___  ___ ___ 
+      ___  ___  ___ ___
   ___| _ \/ _ \/ __| __|
- / -_)   / (_) \__ \ _| 
+ / -_)   / (_) \__ \ _|
  \___|_|_\\___/|___/___|
 
  eROSE Server Develped by Brett19.
@@ -20,21 +20,21 @@ bool ConfigGetEntry( char *pcFile, char *pcNameMust, char* &pcResult )
 	char pcBuffer[ 512 ];
 	char *pcName, *pcPar, *pcPoint;
 	unsigned len;
-		
+
 	pcResult=0;
 
 	// Open file
 	FILE *fh;
 	fh = fopen(pcFile, "r" );
 	if ( fh==NULL ) return false;
-	
+
 	do
 	{
 		fgets( pcBuffer, 510, fh );
 		len = (unsigned)strlen( pcBuffer );
 		if ( pcBuffer[ len-1 ] == '\n' ) --len;
 		pcBuffer[ len ] = 0;
-		
+
 		pcName = pcBuffer;
 		while ( *pcName==' ' || *pcName=='\t' ) ++pcName;
 		if ( *pcName==0 || *pcName=='#' ) continue;
@@ -44,7 +44,7 @@ bool ConfigGetEntry( char *pcFile, char *pcNameMust, char* &pcResult )
 		pcPar = pcPoint;
 		while ( *pcPar==' ' || *pcPar=='\t' || *pcPar=='=' ) ++pcPar;
 		*pcPoint=0;
-		
+
 		#ifdef _WIN32
 		if ( !_strcmpi( pcName, pcNameMust ) )
 		{
@@ -55,7 +55,7 @@ bool ConfigGetEntry( char *pcFile, char *pcNameMust, char* &pcResult )
 			while( *pcPoint==' ' || *pcPoint=='\t' ) *pcPoint--=0;
 			return true;
 		}
-		
+
 		#else
 		if ( strcasecmp( pcName, pcNameMust )==0 )
 		{
@@ -65,21 +65,20 @@ bool ConfigGetEntry( char *pcFile, char *pcNameMust, char* &pcResult )
 			--pcPoint;
 			while( *pcPoint==' ' || *pcPoint=='\t' ) *pcPoint--=0;
 			return true;
-		}		
+		}
 		#endif
-		
+
 	} while ( !feof( fh ) );
-	
+
 	// Close file
 	fclose( fh );
-	
+
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
-// Returns a text
-// -----------------------------------------------------------------------------------------
 char *ConfigGetString( char *pcFile, char *pcName, char *pcDefault )
+// Reads INI files and returns an Integer value for given Name.
 {
 	char *pcRet, *pcRetReal, *pcRetOld;
 	if ( !ConfigGetEntry( pcFile, pcName, pcRet ) ) return strdup( pcDefault );
@@ -90,15 +89,16 @@ char *ConfigGetString( char *pcFile, char *pcName, char *pcDefault )
 		++pcRet;
 		pcRet[ strlen(pcRet) - 1 ] = 0;
 	}
-	
+
 	pcRetReal = strdup( pcRet );
 	free( pcRetOld );
-	
+
 	return pcRetReal;
 }
 
-// Returns a number
+
 unsigned ConfigGetInt( char *pcFile, char *pcName, unsigned uDefault )
+// Reads INI files and returns an Integer value for given Name.
 {
 	char *pcRet;
 	unsigned uRet;
@@ -107,8 +107,7 @@ unsigned ConfigGetInt( char *pcFile, char *pcName, unsigned uDefault )
 
 	uRet = atoi( pcRet );
 	free( pcRet );
-	
+
 	return uRet;
 }
-
 // -----------------------------------------------------------------------------------------

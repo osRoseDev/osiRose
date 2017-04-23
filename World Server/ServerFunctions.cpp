@@ -548,7 +548,7 @@ whie = -15 - 20%
 
 bool CWorldServer::SendSysMsg( CPlayer* thisclient, string message )
 {
-	BEGINPACKET( pak, 0x7df );
+	BEGINPACKET( pak, 0x7df );              // GS Billing Message is used to Send System Messages.
 	ADDBYTE    ( pak, 0xf1 );
 	ADDSTRING  ( pak, message.c_str( ));
 	ADDBYTE    ( pak, 0x00 );

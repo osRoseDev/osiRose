@@ -265,8 +265,43 @@ unsigned CWorldServer::GetNewClientID( )
 
 // This function will free our clientID
 void CWorldServer::ClearClientID( unsigned int id )
-{//Log( MSG_INFO, "free id: %i",id);
-	ClientIDList[id] = time(NULL);
+{
+    ///FK: Code copied from KtRose in order to solve the mysterious Disconnect on return to CS.
+    if(id<0||id>0xffffff){
+        return;
+    }
+
+    #ifdef STATICID
+    //Log(MSG_INFO,"In clear CID %i",id);
+    //LMA: if the thread is already blocked, it should return EBUSY
+    //else 0
+    UINT res_blockP = pthread_mutex_trylock(&GServer->PlayerMutex);
+    UINT res_blockM = pthread_mutex_trylock(&GServer->MapMutex);
+    #endif
+
+    if(ClientIDList[id]>1){
+        Log(MSG_INFO,"CID %i has already been cleared?",id);
+    } else {
+        ClientIDList[id] = (unsigned)time(NULL);
+    }
+
+	Log(MSG_INFO,"XCID, clearing CID %u",id);
+
+    #ifdef STATICID
+    if (res_blockP==0)
+    {
+        pthread_mutex_unlock( &GServer->PlayerMutex );
+    }
+
+    if(res_blockM==0)
+    {
+        pthread_mutex_unlock( &GServer->MapMutex );
+    }
+
+    Log(MSG_INFO,"Out clear CID %i",id);
+    #endif
+
+	return;
 }
 
 // Search a drop by ID

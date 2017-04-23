@@ -583,7 +583,7 @@ bool CWorldServer::LoadDropsData()
 
 bool CWorldServer::LoadPYDropsData()
 {
-    Log(MSG_INFO, "Loading PYDrops Data");
+    Log(MSG_LOAD, "Loading PYDrops Data");
     MDropList.clear();
     MYSQL_ROW row;
     MYSQL_RES *result = DB->QStore("SELECT `id`,`type`,`min_level`,`max_level`,`prob`,`mob`,`map`,`alt` FROM `item_drops`");
@@ -628,13 +628,13 @@ bool CWorldServer::LoadPYDropsData()
         MDropList.push_back(newdrop);
     }
     DB->QFree();
-    Log(MSG_INFO, "PYDrops loaded");
+    Log(MSG_LOAD, "PYDrops loaded");
     return true;
 }
 
 bool CWorldServer::LoadSkillBookDropsData()
 {
-    Log(MSG_INFO, "Loading Skillbook data");
+    Log(MSG_LOAD, "Loading Skillbook data");
     MYSQL_ROW row;
     MYSQL_RES *result = DB->QStore("SELECT `id`,`itemtype`,`min`,`max`,`prob` FROM `list_skillbooks`");
     if(result==NULL)
@@ -657,7 +657,7 @@ bool CWorldServer::LoadSkillBookDropsData()
         SkillbookList.push_back(newdrop);
     }
     DB->QFree();
-    Log(MSG_INFO, "Skillbook Data loaded");
+    Log(MSG_LOAD, "Skillbook Data loaded");
     return true;
 }
 

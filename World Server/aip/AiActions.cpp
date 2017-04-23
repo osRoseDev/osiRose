@@ -839,7 +839,11 @@ AIACT(030)
     char* tempName = reinterpret_cast<char*>(&data->szTrigger) - 2;
     dword hash = MakeStrHash(tempName);
     Log(MSG_INFO, "Execute Quest Trigger %s[%d] [%08x]", tempName, data->lenszTrigger, hash);
+
 //	return (entity->ExecuteQuestTrigger(hash) == QUEST_SUCCESS)?AI_SUCCESS:AI_FAILURE;
+
+    //FK: Function Returns no value;
+    //return (entity->ExecuteQuestTrigger(hash) == QUEST_SUCCESS)?AI_SUCCESS:AI_FAILURE;
 }
 
 //Unknown

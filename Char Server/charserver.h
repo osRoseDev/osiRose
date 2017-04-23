@@ -1,6 +1,6 @@
 /*
     Open Source Rose Online Team - http://osroseon.to.md/
-    note: the Server is develop with erose source server + eich source        
+    note: the Server is develop with erose source server + eich source
 */
 #ifndef __ROSE_SERVERS__
 #define __ROSE_SERVERS__
@@ -19,23 +19,23 @@ class CCharClient : public CClientSocket
 
         // User information
     	UINT userid;
-        bool platinum;    
+        bool platinum;
     	char username[17];
     	char password[33];
     	UINT accesslevel;
     	UINT channel;
-	
+
     	// Character information
-    	char charname[17];	
-    	UINT clanid;	
+    	char charname[17];
+    	UINT clanid;
     	int clan_rank;
     	UINT level;
     	UINT job;
-        UINT charid;	
-	
+        UINT charid;
+
     	bool isLoggedIn;
     	bool returnedfromWS;
-    	bool logout;	
+    	bool logout;
     	vector<CFriendList*> FriendList;
 };
 
@@ -49,25 +49,26 @@ class CCharServer : public CServerSocket
     	void DeleteClientSocket( CClientSocket* thisclient );
     	void LoadEncryption( );
     	void OnClientDisconnect( CClientSocket* thisclient );
-    	bool OnServerReady( );    	
-        void LoadConfigurations( char* );    	
+    	bool DisconnectClientFromChat( CCharClient* thisclientwc ); // FK; Copied from KtRose.
+    	bool OnServerReady( );
+        void LoadConfigurations( char* );
     	bool OnReceivePacket( CClientSocket* thisclient, CPacket* P );
     	bool Ping( );
-    
+
         // Extra functions
         CChanels* GetChannelByID( UINT id );
         CCharClient* GetClientByUserID( UINT id );
       	CCharClient* GetClientByID( UINT id );
     	CCharClient* GetClientByName( char *name );
-    	CCharClient* GetClientByUserName( char *username );	
+    	CCharClient* GetClientByUserName( char *username );
     	CClans* GetClanByID( int id );
         unsigned long int GetServerTime( );
 
         // Community functions
-        bool ChangeMessengerStatus (CCharClient* thisclient, CCharClient* otherclient, int status);	
+        bool ChangeMessengerStatus (CCharClient* thisclient, CCharClient* otherclient, int status);
         bool pakMessengerManager   ( CCharClient* thisclient, CPacket* P );
         bool pakMessengerChat  ( CCharClient* thisclient, CPacket* P );
-    
+
         // Clan Functions
         bool SendClanInfo (CCharClient* thisclient);
         bool ChangeClanStatus (CCharClient* thisclient, CCharClient* otherclient, int channel);
@@ -80,7 +81,7 @@ class CCharServer : public CServerSocket
         bool pakUploadCM ( CCharClient* thisclient, CPacket* P );
         bool pakDownloadCM( CCharClient* thisclient, CPacket* P );
         bool pakClanIconTime( CCharClient* thisclient, CPacket* P );
-    
+
         // General Packets
         bool pakUpdateLevel( CCharClient* thisclient, CPacket* P );
     	bool pakDoIdentify( CCharClient* thisclient, CPacket* P );
@@ -94,16 +95,16 @@ class CCharServer : public CServerSocket
     	bool pakLoginDSClient( CCharClient* thisclient, CPacket* P );
     	bool pak7e5 ( CCharClient* thisclient, CPacket* P );
         bool pakChatrooms ( CCharClient* thisclient, CPacket* P );
-            
+
         // Variables
         string filename;
         vector <CClans*> ClanList;
         vector <CChanels*> ChannelList;
-        
+
             //Login
             SOCKET lsock;                // Socket to Login
-        	char*    lct;                // Encryption table for login server  
-       CDatabase* DB;          
+        	char*    lct;                // Encryption table for login server
+       CDatabase* DB;
 };
 void StartSignal( );
 void StopSignal( );

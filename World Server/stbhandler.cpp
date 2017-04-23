@@ -2,7 +2,7 @@
 #include "worldserver.h"
 
 // -----------------------------------------------------------------------------------------
-// STB reading shit
+// STB reading of all ontent in \3DData
 // -----------------------------------------------------------------------------------------
 int STBStoreData( char* filename, CSTBData* data )
 {
@@ -14,7 +14,10 @@ int STBStoreData( char* filename, CSTBData* data )
 	if (  fh== 0 ) {
 		Log( MSG_ERROR, "Could not load STB '%s'", filename );
 		return 1;
-	}else{
+	} else {
+	    //FK: Added more info.
+	    Log( MSG_LOADFILE, "Loading STB: '%s'", filename );
+
 		// Read the header
 		fseek( fh, 4, SEEK_SET );
 		fread( &dataoffset, 4, 1, fh );
@@ -22,6 +25,7 @@ int STBStoreData( char* filename, CSTBData* data )
 		fread( &data->fieldcount, 4, 1, fh );
 		data->rowcount--;
 		data->fieldcount--;
+
 		// Read the data
 		fseek( fh, dataoffset, SEEK_SET );
 		int* tmp = new int[data->rowcount*data->fieldcount];
@@ -31,11 +35,12 @@ int STBStoreData( char* filename, CSTBData* data )
 			fread( &fieldlen, 2, 1, fh );
 			fread( tmpfield, 1, fieldlen, fh );
 			tmpfield[fieldlen]=0;
-			tmp[j] = atoi( tmpfield ); 
+			tmp[j] = atoi( tmpfield );
 		}
 		fclose( fh );
 	}
-
+    // FK: Added blank line to remove everything
+    Log( MSG_LOADFILE, "                                                                                                                ", "" );
 	return 0;
 }
 

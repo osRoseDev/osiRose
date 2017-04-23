@@ -31,8 +31,8 @@ class CPlayer: public CCharacter
 
     //
     CClientSocket* client;
-    bool questdebug;// Send PM's with quest information
-    bool Saved;// already save this player?(used ondisconnect/returnchar)
+    bool questdebug;        // Send PM's with quest information
+    bool Saved;             // already save this player?(used ondisconnect/returnchar)
     bool isInvisibleMode;
 
     // Fairy
@@ -81,7 +81,7 @@ class CPlayer: public CCharacter
 	// Visible Lists
     vector<CPlayer*>	        VisiblePlayers;	   // Visible players
     vector<CDrop*>		        VisibleDrops;	   // Visible drops
-    vector<unsigned int>		    VisibleMonsters;   // Visible monsters
+    vector<unsigned int>		VisibleMonsters;   // Visible monsters
     vector<CNPC*>			    VisibleNPCs;	   // Visible npcs
 
     // Functions

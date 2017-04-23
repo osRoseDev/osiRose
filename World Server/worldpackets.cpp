@@ -73,7 +73,7 @@ void CWorldServer::pakPlayer( CPlayer *thisclient )
     ADDWORD( pak, thisclient->Attr->Sen );                     // Sen
     ADDWORD( pak, thisclient->Stats->HP );                     // Current HP
     ADDWORD( pak, thisclient->Stats->MP );                     // Current MP
-    ADDDWORD( pak, thisclient->CharInfo->Exp );                 // Exp
+    ADDDWORD( pak, thisclient->CharInfo->Exp );                // Exp
     ADDWORD( pak, thisclient->Stats->Level );                  // Level
     ADDWORD( pak, thisclient->CharInfo->StatPoints );          // Stat Points
     ADDWORD( pak, thisclient->CharInfo->SkillPoints );         // Skill Points
@@ -249,9 +249,9 @@ void CWorldServer::pakQuestData( CPlayer *thisclient )
         {
             Time += thisclient->quest.quests[i].StartTime; // Start time
             Time += STB_QUEST.rows[thisclient->quest.quests[i].QuestID][1] * 10; // Time to finish
-            Time -= time(NULL); // Current time
-            if (Time < 0) Time = 0; // Time is up
-            Time /= 10; // Divide to get 10's of seconds
+            Time -= time(NULL);             // Current time
+            if (Time < 0) Time = 0;         // Time is up
+            Time /= 10;                     // Divide to get 10's of seconds
         }
         pakout.AddDWord( Time ); // Time Left
         for (dword j = 0; j < 10; j++) pakout.AddWord(thisclient->quest.quests[i].Variables[j]);
@@ -319,6 +319,7 @@ bool CWorldServer::pakDoIdentify( CPlayer *thisclient, CPacket *P )
     memcpy( thisclient->Session->password, &P->Buffer[4], 32 );
     MYSQL_RES *result = DB->QStore("SELECT username,lastchar,accesslevel,zulystorage FROM accounts WHERE id=%i AND password='%s'", thisclient->Session->userid, thisclient->Session->password);
     if (result==NULL) return false;
+
     if (mysql_num_rows( result ) != 1)
     {
         Log( MSG_HACK, "Someone tried to connect to world server with an invalid account" );
@@ -326,32 +327,39 @@ bool CWorldServer::pakDoIdentify( CPlayer *thisclient, CPacket *P )
         return false;
     }
     row = mysql_fetch_row(result);
+
     strncpy( thisclient->Session->username, row[0],16 );
     strncpy( thisclient->CharInfo->charname, row[1],16 );
     thisclient->Session->accesslevel = atoi(row[2]);
     thisclient->CharInfo->Storage_Zulies = atoi( row[3] );
     DB->QFree( );
     if (!thisclient->loaddata( )) return false;
+
     Log( MSG_INFO, "User '%s'(#%i) logged in with character '%s'", thisclient->Session->username, thisclient->Session->userid, thisclient->CharInfo->charname);
+
     BEGINPACKET( pak, 0x070c );
     ADDBYTE    ( pak, 0 );
     ADDDWORD   ( pak, 0x87654321 );
     ADDDWORD   ( pak, 0x00000000 );
     thisclient->client->SendPacket( &pak );
+
     pakPlayer(thisclient);
     pakInventory(thisclient);
     pakQuestData(thisclient);
 
-    RESETPACKET( pak, 0x7de );
-    ADDWORD ( pak, 0x1001 ); // 0x1001 to 0x1013 (game plan?)
-    ADDDWORD ( pak, 2 ); // options (plan time?) [2 = unlimited]
+    RESETPACKET( pak, 0x7de );          /// Billing Message / Gameplan
+    ADDWORD ( pak, 0x1001 );            /// 0x1001 to 0x1013 (game plan?)
+    ADDDWORD ( pak, 2 );                /// options (plan time?) [2 = unlimited]
     thisclient->client->SendPacket( &pak );
 
-    /*	RESETPACKET( pak, 0x702 );
+    /// Welcome Message via GS Announce Chat.
+    	RESETPACKET( pak, 0x702 );      // Game Server Announce Chat.
     	ADDSTRING  ( pak, Config.WELCOME_MSG );
     	ADDBYTE    ( pak, 0 );
     	thisclient->client->SendPacket( &pak );
-    	SendSysMsg( thisclient, "Osirose server made by the comunity of osrose " );*/
+    /*
+    	SendSysMsg( thisclient, "Osirose server made by the comunity of osrose " );
+    */
     thisclient->SetStats( );
     return true;
 }
@@ -1377,42 +1385,40 @@ bool CWorldServer::pakWhisper ( CPlayer* thisclient, CPacket* P )
 // Return to Char Select
 bool CWorldServer::pakCharSelect ( CPlayer* thisclient, CPacket* P )
 {
+    thisclient->savedata();
+
     if (!thisclient->Session->inGame) return true;
-    BEGINPACKET( pak, 0x707 );
-    ADDWORD( pak, 0 );
-    thisclient->client->SendPacket( &pak );
+    Log( MSG_INFO, "OnClientDisconnect Start");
+    OnClientDisconnect(thisclient->client);
+    Log( MSG_INFO, "OnClientDisconnect Done");
+    thisclient->Session->isLoggedIn = false;
+
+    if (thisclient->client!=NULL) thisclient->client->isActive = false;
+
+    //BEGINPACKET( pak, 0x707 );              // GameServer Logout Reply
+    //ADDWORD( pak, 0 );                      // Seconds to wait.
+    //thisclient->client->SendPacket( &pak ); // Send to Client
+
+    Log( MSG_INFO, "WS; Sending ISC 0x7e1");
     thisclient->Session->inGame=false;
-    RESETPACKET( pak, 0x7e1 );
+    BEGINPACKET( pak, 0x7e1 );
     ADDBYTE    ( pak, 0xfa );
-    ADDWORD    ( pak, thisclient->Session->userid );//CharInfo->charid );
+    ADDWORD    ( pak, thisclient->Session->userid );//CharInfo->charid ); //FK--
+    //ADDWORD    ( pak, thisclient->CharInfo->charid ); //FK++
     ADDBYTE    ( pak, 0x00 );
     SendISCPacket( &pak );
-    /*
-        for(unsigned j=0; j<thisclient->VisiblePlayers.size(); j++) {
-            CPlayer* otherclient=thisclient->VisiblePlayers.at(j);
-    		thisclient->ClearObject(otherclient->clientid);
-    	}
-        for(unsigned j=0; j<thisclient->VisibleMonsters.size(); j++) {
-    		thisclient->ClearObject(thisclient->VisibleMonsters.at(j));
-    	}
-    	for(unsigned j=0; j<thisclient->VisibleDrops.size(); j++) {
-            CDrop* thisdrop = thisclient->VisibleDrops.at(j);
-    		thisclient->ClearObject(thisdrop->clientid);
-    	}
-    	for(unsigned j=0; j<thisclient->VisibleNPCs.size(); j++) {
-            CNPC* thisnpc = thisclient->VisibleNPCs.at(j);
-            thisclient->ClearObject( thisnpc->clientid );
-    	}*/
 
-    thisclient->savedata();
+    Log( MSG_INFO, "Clear User()");
+    pakClearUser( thisclient );
+    //Log( MSG_INFO, "Clear ClientID()");
+    //ClearClientID( thisclient->clientid );
+    thisclient->Saved = true;
+
+    /// Send Another ISC Packet.
     RESETPACKET( pak, 0x505 );
     ADDWORD    ( pak,  thisclient->Session->userid );
     SendISCPacket( &pak );
-    thisclient->Session->isLoggedIn = false;
-    thisclient->Saved = true;
-    pakClearUser( thisclient );
-    ClearClientID( thisclient->clientid );
-    if (thisclient->client!=NULL) thisclient->client->isActive = false;
+
     return true;
 }
 

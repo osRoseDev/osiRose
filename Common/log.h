@@ -1,6 +1,6 @@
 /*
     Open Source Rose Online Team - http://osroseon.to.md/
-    note: the Server is develop with erose source server + eich source        
+    note: the Server is develop with erose source server + eich source
 */
 #ifndef __ROSE_LOGGING_FUNCTIONS__
 #define __ROSE_LOGGING_FUNCTIONS__
@@ -45,6 +45,7 @@ enum msg_type {
 	MSG_FATALERROR,
 	MSG_HACK,
 	MSG_LOAD,
+	MSG_LOADFILE,
 	MSG_SDEBUG,
 	MSG_GMACTION,
 	MSG_START,

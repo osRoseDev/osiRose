@@ -235,15 +235,16 @@ void CWorldServer::OnClientDisconnect( CClientSocket* thisclient )
     {
     	player->savedata();
         player->Session->isLoggedIn = false;
+
         //send packet to change messenger status (offline)
     	BEGINPACKET( pak, 0x7e1 );
     	ADDBYTE    ( pak, 0xfa );
-    	ADDWORD    ( pak, player->Session->userid );//CharInfo->charid );CharInfo->charid );
-    	ADDBYTE    ( pak, 0x00 );
-    //	cryptPacket( (char*)&pak, NULL );
-    //	send( csock, (char*)&pak, pak.Size, 0 );
+    	//ADDWORD    ( pak, player->Session->userid ); FK Disabled this line, inserted next.
+    	ADDDWORD    ( pak, player->CharInfo->charid );
+    	//ADDBYTE    ( pak, 0x00 ); // FK Disabled command.
         SendISCPacket (&pak);
     }
+
     if ( player->Fairy ){
         GServer->FairyList.at(player->FairyListIndex)->assigned = false;
         GServer->FairyList.at(player->FairyListIndex)->LastTime = clock();
@@ -252,6 +253,7 @@ void CWorldServer::OnClientDisconnect( CClientSocket* thisclient )
         player->Fairy = false;
         player->FairyListIndex = 0;
         GServer->DoFairyStuff(player, 0);
+
         // recalculate FairyMax
         int oldFairyMax = GServer->Config.FairyMax;
         GServer->Config.FairyMax = (int)ceil((float)GServer->ClientList.size() / 50.0); //(1 fairy more every 50 player)
@@ -259,6 +261,7 @@ void CWorldServer::OnClientDisconnect( CClientSocket* thisclient )
             GServer->FairyList.erase( GServer->FairyList.begin() + GServer->FairyList.size() );
         }
     }
+
     if(player->Party->party!=NULL)
     {
         CParty* party = player->Party->party;
@@ -297,6 +300,7 @@ void CWorldServer::OnClientDisconnect( CClientSocket* thisclient )
             }
             RemoveParty( party );
             delete party;
+            party=NULL; //FK ++
         }
     }
     DB->QExecute("UPDATE accounts SET online=false where id=%u", player->Session->userid );
@@ -439,9 +443,11 @@ void CWorldServer::DeleteClientSocket( CClientSocket* thisclient )
         map->RemovePlayer( player );
         pthread_mutex_unlock( &MapMutex );
     	delete player;
+    } else {
+        delete thisclient;
     }
-    else delete thisclient;
-	Log( MSG_INFO, "User Disconnected" );
+
+    Log( MSG_INFO, "User Disconnected from worldserver." );
 }
 
 void CWorldServer::SendISCServerInfo( )

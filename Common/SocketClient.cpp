@@ -1,22 +1,22 @@
 /*
     Rose Online Server Emulator
     Copyright (C) 2006,2007 OSRose Team http://osroseon.to.md
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-    developed with Main erose/hrose source server + some change from the original eich source        
+    developed with Main erose/hrose source server + some change from the original eich source
 */
 #include "sockets.h"
 #include "config.h"
@@ -31,7 +31,7 @@ CClientSocket::CClientSocket( )
 // Destructor
 CClientSocket::~CClientSocket( )
 {
-    
+
 }
 
 // Receive this client's socket
@@ -39,23 +39,23 @@ bool CClientSocket::ReceiveData( )
 {
 	int   ReceivedBytes;
 	short BytesToRead;
-	
+
 	// Calculate bytes to read to get the full packet
 	BytesToRead = PacketSize - PacketOffset;
 	// This should never happen, but it is integrated:
 	if ( BytesToRead > 0x400 - PacketOffset ) return false;
 	if ( BytesToRead == 0 ) return false;
-	
+
 	// Receive data from client
 	ReceivedBytes = recv( sock, (char*)&Buffer[ PacketOffset ], BytesToRead, 0 );
 	if ( ReceivedBytes <= 0 ) return false;
-	
+
 	// Update pointer
 	PacketOffset += ReceivedBytes;
-	
+
 	// If the packet is not complete, leave the function
 	if ( ReceivedBytes != BytesToRead ) return true;
-	
+
 	if ( PacketSize == 6 )
 	{
 		// We received the headerblock
@@ -65,14 +65,14 @@ bool CClientSocket::ReceiveData( )
 		CPacket* header = (CPacket*)&Buffer;
 		PacketSize = header->Size;
 #endif
-		
+
 		// Did we receive an incorrect buffer?
 		if ( PacketSize < 6 )
 		{
 			Log(MSG_ERROR, "(SID:%i) Client sent incorrect blockheader.", sock );
 			return false;
 		}
-		
+
 		// Is the packet larger than just the header, then continue receiving
 		if ( PacketSize > 6 ) return true;
 	}
@@ -88,7 +88,7 @@ bool CClientSocket::ReceiveData( )
   cryptPacket( (char*)Buffer, this->ct);
 #endif
    CPacket* pak = (CPacket*)&Buffer;
-	
+
 	FILE *fh = fopen(  "log/receivedpackets.log", "a+" );
 	if ( fh != NULL ) {
 		fprintf( fh, "(SID:%08u) IN  %04x: ", sock, pak->Command );
@@ -96,19 +96,19 @@ bool CClientSocket::ReceiveData( )
 		fprintf( fh, "\n" );
 		fclose( fh );
 	}
-	
+
 	// Handle actions for this packet
 	if ( !GS->OnReceivePacket( this, pak ) )
 	{
          //Log(MSG_ERROR, "onrecieve packet returned false");
          return false;
     }
-		
+
 
 	// Reset values for the next packet
 	PacketSize   = 6;
 	PacketOffset = 0;
-	
+
 	return true;
 }
 
@@ -119,7 +119,7 @@ void CClientSocket::SendPacket( CPacket *P )
 	//             PACKET AND NOT USE THE ORIGINAL, IT WILL FUCK UP
 	//             THE SENDTOALL FUNCTIONS
 
-    	unsigned char* Buffer = (unsigned char*)P;
+    unsigned char* Buffer = (unsigned char*)P;
 	unsigned Size = P->Size;
 #ifndef USE124
 	EncryptBuffer( CryptTable, Buffer );
@@ -143,7 +143,7 @@ void CClientSocket::SendPacketCpy( CPacket *P )
 PVOID ClientMainThread( PVOID ClientSocket )
 {
     CClientSocket* thisplayer = (CClientSocket*) ClientSocket;
-	fd_set fds;    
+	fd_set fds;
     while(thisplayer->isActive)
     {
         FD_ZERO(&fds);
@@ -169,11 +169,11 @@ PVOID ClientMainThread( PVOID ClientSocket )
                     thisplayer->isActive = false;
                 }
             }
-        }   
-             
-    }   
-    thisplayer->GS->DisconnectClient( thisplayer );     
-    pthread_exit(NULL);  
+        }
+
+    }
+    thisplayer->GS->DisconnectClient( thisplayer );
+    pthread_exit(NULL);
 	return 0 ;
 }
 
