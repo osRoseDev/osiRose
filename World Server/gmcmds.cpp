@@ -63,9 +63,12 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
     }
     else if (strcmp(command, "save")==0) // *** SAVE USER DATA *****
     {
-        if (Config.Command_Save > thisclient->Session->accesslevel)
-            return true;
-        thisclient->savedata();
+        if (Config.Command_Save > thisclient->Session->accesslevel) {
+            // Do nothing.
+        } else {
+            thisclient->savedata();
+            SendPM(thisclient,"Data is saved.");
+        }
         return true;
     }
     else if (strcmp(command, "reload")==0) // *** REALOAD CONFIG.INI ******
@@ -79,6 +82,30 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
     else if (strcmp(command, "mystat")==0)
     {
         if ((tmp = strtok(NULL, " "))==NULL)return true;
+
+        if (strcmp(tmp,"?")==0){
+            /// FJMK : Help for mystat Command.
+            SendPM     (thisclient, "[ mystat command help]");
+            SendPM     (thisclient, " syntax: /mystat <stat>");
+            SendSysMsg (thisclient, "  ap     = Current Attack Power");
+            SendSysMsg (thisclient, "  mp     = Current MP value");
+            SendSysMsg (thisclient, "  hp     = Current HP value");
+            SendSysMsg (thisclient, "  maxhp  = Max. HP value");
+            SendSysMsg (thisclient, "  maxmp  = Max. MP value");
+            SendSysMsg (thisclient, "  dodge  = Current Dodge value");
+            SendSysMsg (thisclient, "  def    = Current Defense (def) value");
+            SendSysMsg (thisclient, "  mdef   = Current Magical Defense (mdef) value");
+            SendSysMsg (thisclient, "  crit   = Current Critical hit (crit) value");
+            SendSysMsg (thisclient, "  aspd   = Current Attack speed");
+            SendSysMsg (thisclient, "  mspd   = Current Moving speed");
+            SendSysMsg (thisclient, "  xprate = Current XP Earning rate");
+            SendSysMsg (thisclient, "  stamina= Current Stamina value");
+            SendSysMsg (thisclient, "  weight = My weight values");
+
+
+            return true;
+        }
+
         if (strcmp(tmp, "ap")==0)
         {
             char buffer2[200];
@@ -253,7 +280,7 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         ADDWORD(pak, 0x40b3);
         thisclient->client->SendPacket(&pak);
         DB->QExecute("UPDATE characters SET hairStyle=%i WHERE id=%i", thisclient->CharInfo->Hair, thisclient->CharInfo->charid);
-        SendPM(thisclient, "Hair changed!");
+        SendSysMsg(thisclient,"Hair changed %i!",thisclient->CharInfo->Hair);
     }
     else if (strcmp(command, "pvp")==0)
     {
@@ -311,10 +338,10 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         SendPM(thisclient, line0 );
         return true;
     }
- 
+
     else if (strcmp(command, "go")==0) // Use SQL by Likol
     {
- 
+
         if(Config.Command_Go > thisclient->Session->accesslevel)
         {
         DB->QFree( );
@@ -368,10 +395,10 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
             Log( MSG_GMACTION, " %s : /go %i" , thisclient->CharInfo->charname, loc);
             DB->QFree( );
             return true;
- 
+
         }
     }
- 
+
 /*
     else if (strcmp(command, "go")==0) // AtCommandGo
     {
@@ -670,8 +697,8 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         Log( MSG_GMACTION, " %s : /level %i %s" , thisclient->CharInfo->charname, level, name);
         return pakGMLevel( thisclient, level, name );
     }
-    else if (strcmp(command, "info")==0)
-    {
+    else if (strcmp(command, "info")==0){
+        // FK: Revamped.
         if (Config.Command_Info > thisclient->Session->accesslevel)
             return true;
         Log( MSG_GMACTION, " %s : /info" , thisclient->CharInfo->charname);
@@ -879,6 +906,7 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         }
         else
             return true;
+
         if ((tmp = strtok(NULL, " "))==NULL)return true;
         id=atoi(tmp);
         if ((tmp = strtok(NULL, " "))==NULL)
@@ -995,7 +1023,7 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         thisclient->SetStats( );
         return true;
     }
-    else if (strcmp(command, "item")==0)//Modified by Hiei (added refine/socket/stats)
+    else if (strcmp(command, "item")==0) //Modified by Hiei (added refine/socket/stats)
     {
         if (Config.Command_Item > thisclient->Session->accesslevel)
             return true;
