@@ -21,6 +21,7 @@
 #include "player.h"
 #include "worldserver.h"
 
+
 // Returns the amount of exp that is needed for the next level
 UINT CPlayer::GetLevelEXP( )
 {
@@ -93,21 +94,29 @@ bool CPlayer::CheckPlayerLevelUP( )
 // Send a PM to client with user information
 bool CPlayer::GetPlayerInfo( )
 {
+    ///FK:TODO; Added more implementations for SendSysMsg and it's working just fine... This saves alot of clutter!
     char text[50];
-    sprintf(text,"Attack: %i | Critical: %i",Stats->Attack_Power, Stats->Critical );
+    GServer->SendSysMsg(client,"[GM Player Info] /info");
+    GServer->SendSysMsg(client,"[INFO] Attack: %i | Critical: %i",Stats->Attack_Power, Stats->Critical );
+
+    //sprintf(text,"Attack: %i | Critical: %i",Stats->Attack_Power, Stats->Critical );
+
+
+	//BEGINPACKET( pak, 0x0784 );
+	//ADDSTRING( pak, "[GM]PlayerInfo" );
+	//ADDBYTE( pak, 0 );
+	//ADDSTRING( pak, text );
+	//ADDBYTE( pak, 0 );
+	//client->SendPacket(&pak);
+
+    sprintf(text,"Defense: %i | Magic Defense: %i",Stats->Defense, Stats->Magic_Defense);
 	BEGINPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
 	ADDBYTE( pak, 0 );
 	ADDSTRING( pak, text );
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
-    sprintf(text,"Defense: %i | Magic Defense: %i",Stats->Defense, Stats->Magic_Defense);
-	RESETPACKET( pak, 0x0784 );
-	ADDSTRING( pak, "[GM]PlayerInfo" );
-	ADDBYTE( pak, 0 );
-	ADDSTRING( pak, text );
-	ADDBYTE( pak, 0 );
-	client->SendPacket(&pak);
+
     sprintf(text,"Accury: %i | Dodge: %i",Stats->Accury,Stats->Dodge );
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
@@ -115,6 +124,7 @@ bool CPlayer::GetPlayerInfo( )
 	ADDSTRING( pak, text );
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
+
     sprintf(text,"aspeed: %i | mspeed: %i",Stats->Attack_Speed,Stats->Move_Speed );
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
@@ -123,6 +133,7 @@ bool CPlayer::GetPlayerInfo( )
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
     sprintf(text,"HP: %i/%i , MP: %i/%i",Stats->HP,Stats->MaxHP,Stats->MP,Stats->MaxMP);
+
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
 	ADDBYTE( pak, 0 );
@@ -130,6 +141,7 @@ bool CPlayer::GetPlayerInfo( )
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
     sprintf(text,"Position[%i]: (%.0f,%.0f)",Position->Map,Position->current.x,Position->current.y);
+
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
 	ADDBYTE( pak, 0 );
@@ -137,12 +149,14 @@ bool CPlayer::GetPlayerInfo( )
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
     sprintf(text,"ClientID: %u | CharID: %u", clientid, CharInfo->charid );
+
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
 	ADDBYTE( pak, 0 );
 	ADDSTRING( pak, text );
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
+
     sprintf(text,"inGame: %i | Logged: %i", Session->inGame, Session->isLoggedIn );
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
@@ -150,6 +164,7 @@ bool CPlayer::GetPlayerInfo( )
 	ADDSTRING( pak, text );
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
+
     sprintf(text,"ClanName[%u]: %s | ClanGrade: %i | ClanRank: %i", Clan->clanid, Clan->clanname, Clan->grade, Clan->clanrank );
 	RESETPACKET( pak, 0x0784 );
 	ADDSTRING( pak, "[GM]PlayerInfo" );
@@ -157,6 +172,7 @@ bool CPlayer::GetPlayerInfo( )
 	ADDSTRING( pak, text );
 	ADDBYTE( pak, 0 );
 	client->SendPacket(&pak);
+
     return true;
 }
 
