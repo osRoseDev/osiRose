@@ -8,4 +8,6 @@ Binary/3DData/AI*
 Binary/3DData/STB*
 Binary/3DData/QuestData*
 *.layout
+Binary/*.layout
 *.depend
+Binary/Start Client 766.lnk

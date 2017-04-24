@@ -1,6 +1,6 @@
 /*
     Open Source Rose Online Team - http://osroseon.to.md/
-    note: the Server is develop with erose source server + eich source        
+    note: the Server is develop with erose source server + eich source
 */
 #ifndef __ROSE_DATATYPES__
 #define __ROSE_DATATYPES__
@@ -25,14 +25,17 @@ struct CItem {
 
 // A single client character
 struct CCharacter {
-	char char_name[17];
-	UINT level;
-	UINT face;
-	UINT hairStyle;
-	int sex;
-	UINT classid;
-	UINT id;
-	unsigned long int DeleteTime;
+    // FK: Fixed up this structure with default values;
+    // Otherwise garbage is taken from memory and displayed in the client!
+    // This solves the garbled name issue in certain Rose clients.
+	char char_name[17]={0x00};
+	UINT level=0;
+	UINT face=0;
+	UINT hairStyle=0;
+	int sex=0;
+	UINT classid=0;
+	UINT id=0;
+	unsigned long int DeleteTime=0;
 };
 
 // List of friends
@@ -49,7 +52,7 @@ struct CClans
     int logo;
     int back;
     int grade;
-    int cp;  
+    int cp;
     char name[17];
     char slogan[30];
     char news[260];
@@ -59,9 +62,9 @@ struct CClans
 // Channel list
 struct CChanels
 {
-    UINT id;    
+    UINT id;
     char* ip;
-    UINT port;    
+    UINT port;
     SOCKET sock;
 };
 #endif

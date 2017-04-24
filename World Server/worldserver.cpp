@@ -858,8 +858,10 @@ void CWorldServer::ReceivedISCPacket( CPacket* pak )
 }
 
 // Incoming packet
-bool CWorldServer::OnReceivePacket( CClientSocket* thisclient, CPacket *P )
-{//Log( MSG_INFO, "(SID:%i) Received packet. Command:%04x Size:%04x", thisclient->sock, P->Command, P->Size );
+bool CWorldServer::OnReceivePacket( CClientSocket* thisclient, CPacket *P ){
+///FK ; Packet Definition
+    Log( MSG_INFO, "(SID:%i) Received packet. Command:%04x Size:%04x", thisclient->sock, P->Command, P->Size );
+
 	switch( P->Command )
 	{
         case 0x0500: return pakCSReady          ( (CPlayer*)thisclient->player, P );
