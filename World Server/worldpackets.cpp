@@ -1128,7 +1128,6 @@ bool CWorldServer::pakStartAttack( CPlayer* thisclient, CPacket* P )
 }
 
 // Goto next map through gate
-// Goto next map through gate
 bool CWorldServer::pakGate( CPlayer* thisclient, CPacket* P )
 {
     thisclient->Session->inGame = false;
@@ -1344,6 +1343,7 @@ bool CWorldServer::pakSaveTown ( CPlayer* thisclient, CPacket* P )
     GServer->DB->QExecute("UPDATE characters SET townid=%i WHERE id=%i",thisclient->Position->saved,thisclient->CharInfo->charid );
     return true;
 }
+
 // Shouting
 bool CWorldServer::pakShout ( CPlayer* thisclient, CPacket* P )
 {
@@ -1388,9 +1388,9 @@ bool CWorldServer::pakCharSelect ( CPlayer* thisclient, CPacket* P )
     thisclient->savedata();
 
     if (!thisclient->Session->inGame) return true;
-    Log( MSG_INFO, "OnClientDisconnect Start");
+
     OnClientDisconnect(thisclient->client);
-    Log( MSG_INFO, "OnClientDisconnect Done");
+
     thisclient->Session->isLoggedIn = false;
 
     if (thisclient->client!=NULL) thisclient->client->isActive = false;
@@ -3764,7 +3764,7 @@ bool CWorldServer::pakRepairItem( CPlayer* thisclient, CPacket* P )
     case 18:
     case 129:
     case 0x3d: //Ronk
-    case 0x39: //Ronk to
+    case 0x39: //Ronk too
     case 0x1c:
     case 0x08:
     case 0x74:
