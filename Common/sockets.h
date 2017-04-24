@@ -350,9 +350,9 @@ public:
     bool ReceiveData( );                // Receive packet
     void SendPacket( CPacket *P );      // Send Packet
     void SendPacketCpy( CPacket *P );	// Send a packet without encrypting the orginal packet
-    CCryptStatus				CryptStatus;			// Status of the encryption
+    CCryptStatus CryptStatus;			// Status of the encryption
     class CServerSocket* GS;	        // Pointer to Server class
-    bool ISCThread(); // Raven0123
+    bool ISCThread();                   // Raven0123
     struct sockaddr_in clientinfo;
     void* player;
 #ifdef USE124
@@ -386,12 +386,12 @@ public:
     bool DoSQL(char *Format, ...);
 
     // Virtual Functions
-    virtual void LoadEncryption( );      //load encryption
-    virtual void ServerLoop( );                  // Main Loop
-    virtual CClientSocket* CreateClientSocket( ); // Create a client
+    virtual void LoadEncryption( );                 //load encryption
+    virtual void ServerLoop( );                     // Main Loop
+    virtual CClientSocket* CreateClientSocket( );   // Create a client
     virtual void DeleteClientSocket( CClientSocket* thisclient ); // Delete client
-    virtual bool OnServerReady( );       // Executed with server is ready
-    virtual void OnServerStep( );        // Executed
+    virtual bool OnServerReady( );                  // Executed with server is ready
+    virtual void OnServerStep( );                   // Executed
     virtual void OnServerDie( );
     virtual bool OnReceivePacket( CClientSocket* thisclient, CPacket* P );
     virtual void ReceivedISCPacket( CPacket* pak ); // Raven0123
@@ -413,9 +413,9 @@ public:
 
     void SendISCPacket( CPacket* pak ); // Raven0123
 };
-PVOID ClientMainThread( PVOID ); // Handle clients
-bool	InitWinSocket ( void ); // Init windows sockets (wsa)
-void	CloseWinSocket( void ); // Close Windows sockets (wsa)
+PVOID ClientMainThread( PVOID );    // Handle clients
+bool	InitWinSocket ( void );     // Init windows sockets (wsa)
+void	CloseWinSocket( void );     // Close Windows sockets (wsa)
 // -----------------------------------------------------------------------------------------
 
 #endif

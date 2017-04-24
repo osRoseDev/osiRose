@@ -125,7 +125,6 @@ void CClientSocket::SendPacket( CPacket *P )
 	EncryptBuffer( CryptTable, Buffer );
 #endif
 	send( sock, (char*)Buffer, Size, 0 );
-
 }
 
 //-------------------------------------------------------------------------
@@ -158,14 +157,10 @@ PVOID ClientMainThread( PVOID ClientSocket )
         {
             if(FD_ISSET( thisplayer->sock, &fds ))
             {
-                if (thisplayer->isserver == true)
-                {
+                if (thisplayer->isserver == true){
                    //Log( MSG_INFO,"ISC PACKET");
                    thisplayer->ISCThread();
-                }
-                else
-                if(!thisplayer->ReceiveData( ))
-                {
+                } else if(!thisplayer->ReceiveData( )){
                     thisplayer->isActive = false;
                 }
             }
