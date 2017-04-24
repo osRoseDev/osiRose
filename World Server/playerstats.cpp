@@ -1615,7 +1615,10 @@ unsigned int CPlayer::GetMaxWeight()
 // Current weight
 unsigned int CPlayer::GetCurrentWeight()
 {
+    /// FK TODO: This function crashes the world server when store coupons are equipped
+    /// This server does not know about store coupons, they are itemtype 0 ?
     UINT weight = 0;
+
     for(UINT i=0;i<MAX_INVENTORY;i++)
     {
         if(items[i].itemtype<10)
