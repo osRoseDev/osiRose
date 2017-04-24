@@ -1,75 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
-	<ActiveTarget name="Release" />
-	<File name="..\Common\log.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1730" topLine="66" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\stbhandler.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<ActiveTarget name="Debug" />
+	<File name="..\World Server\stbhandler.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="728" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\World Server\quest\Quests.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\World Server\playerstats.cpp" open="1" top="1" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="250" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\worldserver.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="14523" topLine="374" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\startup.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="23598" topLine="638" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\extrafunctions.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8447" topLine="281" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\player.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1236" topLine="21" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\Worldprocess.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="988" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\ServerFunctions.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="22415" topLine="635" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\worldpackets.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="27268" topLine="991" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\main.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1727" topLine="37" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\WorldServer.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="15686" topLine="309" />
-		</Cursor>
-	</File>
-	<File name="..\World Server\aip\AiConditions.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="23508" topLine="766" />
-		</Cursor>
-	</File>
-	<File name="..\Common\database\database.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5224" topLine="136" />
+			<Cursor1 position="57154" topLine="1610" />
 		</Cursor>
 	</File>
 	<File name="..\Common\sockets.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -77,9 +17,195 @@
 			<Cursor1 position="2998" topLine="82" />
 		</Cursor>
 	</File>
-	<File name="..\World Server\stbhandler.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\World Server\startup.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="23598" topLine="638" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\stbhandler.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="134" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\main.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1727" topLine="37" />
+		</Cursor>
+	</File>
+	<File name="..\Common\database\database.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5224" topLine="136" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\extrafunctions.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8447" topLine="281" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\playerfunctions.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4488" topLine="126" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\Worldprocess.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="988" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\WorldServer.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2076" topLine="50" />
+		</Cursor>
+	</File>
+	<File name="..\Common\SocketServer.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="105" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\player.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4538" topLine="117" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\aip\AiConditions.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="23508" topLine="766" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\quest\QuestActions.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12480" topLine="358" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\playerdata.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1610" topLine="48" />
+		</Cursor>
+	</File>
+	<File name="..\Common\SocketClient.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5060" topLine="131" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\worldpackets.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="966" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\quest\Quests.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="250" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\ServerFunctions.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1787" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\gmcmds.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7858" topLine="195" />
+		</Cursor>
+		<Folding>
+			<Collapse line="202" />
+			<Collapse line="208" />
+			<Collapse line="239" />
+			<Collapse line="264" />
+			<Collapse line="285" />
+			<Collapse line="312" />
+			<Collapse line="342" />
+			<Collapse line="401" />
+			<Collapse line="500" />
+			<Collapse line="539" />
+			<Collapse line="543" />
+			<Collapse line="559" />
+			<Collapse line="592" />
+			<Collapse line="637" />
+			<Collapse line="664" />
+			<Collapse line="688" />
+			<Collapse line="699" />
+			<Collapse line="708" />
+			<Collapse line="730" />
+			<Collapse line="741" />
+			<Collapse line="856" />
+			<Collapse line="956" />
+			<Collapse line="968" />
+			<Collapse line="1026" />
+			<Collapse line="1056" />
+			<Collapse line="1063" />
+			<Collapse line="1099" />
+			<Collapse line="1110" />
+			<Collapse line="1122" />
+			<Collapse line="1133" />
+			<Collapse line="1142" />
+			<Collapse line="1151" />
+			<Collapse line="1160" />
+			<Collapse line="1169" />
+			<Collapse line="1184" />
+			<Collapse line="1193" />
+			<Collapse line="1206" />
+			<Collapse line="1215" />
+			<Collapse line="1247" />
+			<Collapse line="1256" />
+			<Collapse line="1265" />
+			<Collapse line="1291" />
+			<Collapse line="1309" />
+			<Collapse line="1329" />
+			<Collapse line="1349" />
+			<Collapse line="1374" />
+			<Collapse line="1427" />
+			<Collapse line="1447" />
+			<Collapse line="1464" />
+			<Collapse line="1476" />
+			<Collapse line="1495" />
+			<Collapse line="1507" />
+			<Collapse line="1514" />
+			<Collapse line="1562" />
+			<Collapse line="1594" />
+			<Collapse line="1603" />
+			<Collapse line="1614" />
+			<Collapse line="1626" />
+			<Collapse line="1657" />
+			<Collapse line="1688" />
+			<Collapse line="1697" />
+			<Collapse line="1707" />
+			<Collapse line="1714" />
+			<Collapse line="1721" />
+			<Collapse line="1727" />
+			<Collapse line="1736" />
+			<Collapse line="1746" />
+			<Collapse line="1770" />
+			<Collapse line="1793" />
+			<Collapse line="1827" />
+			<Collapse line="1846" />
+			<Collapse line="1859" />
+			<Collapse line="1890" />
+			<Collapse line="1906" />
+			<Collapse line="1914" />
+			<Collapse line="1922" />
+			<Collapse line="1931" />
+			<Collapse line="1943" />
+			<Collapse line="1952" />
+			<Collapse line="1973" />
+			<Collapse line="1986" />
+			<Collapse line="1998" />
+			<Collapse line="2008" />
+			<Collapse line="2021" />
+		</Folding>
+	</File>
+	<File name="..\Common\log.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1730" topLine="66" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\worldserver.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="22050" topLine="905" />
+		</Cursor>
+	</File>
+	<File name="..\World Server\player.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7671" topLine="252" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
