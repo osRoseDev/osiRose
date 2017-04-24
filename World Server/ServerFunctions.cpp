@@ -30,13 +30,61 @@ bool CWorldServer::SendPM( CPlayer* thisclient, char* Format, ... )
            BEGINPACKET( pak, 0x0784 );
            ADDSTRING( pak, "Server" );
            ADDBYTE( pak, 0 );
-     ADDSTRING( pak, buf );
+           ADDSTRING( pak, buf );
            ADDBYTE( pak, 0 );
            thisclient->client->SendPacket(&pak);
   va_end( ap );
            return true;
 }
 
+bool CWorldServer::SendSysMsg( CClientSocket* client, string message )
+{
+	BEGINPACKET( pak, 0x7df );              // GS Billing Message is used to Send System Messages.
+	ADDBYTE    ( pak, 0xf1 );
+	ADDSTRING  ( pak, message.c_str( ));
+	ADDBYTE    ( pak, 0x00 );
+	client->SendPacket( &pak );
+    return true;
+}
+bool CWorldServer::SendSysMsg( CClientSocket* client, char* Format, ... )
+{
+  char buf[512];
+  va_list ap;
+  va_start( ap, Format );
+  vsprintf( buf, Format, ap );
+
+  BEGINPACKET( pak, 0x07df );
+  ADDBYTE    ( pak, 0xf1 );
+  ADDSTRING( pak, buf );
+  ADDBYTE( pak, 0x0 );
+  client->SendPacket(&pak);
+  va_end( ap );
+  return true;
+}
+bool CWorldServer::SendSysMsg( CPlayer* thisclient, string message )
+{
+	BEGINPACKET( pak, 0x7df );              // GS Billing Message is used to Send System Messages.
+	ADDBYTE    ( pak, 0xf1 );
+	ADDSTRING  ( pak, message.c_str( ));
+	ADDBYTE    ( pak, 0x00 );
+	thisclient->client->SendPacket( &pak );
+    return true;
+}
+bool CWorldServer::SendSysMsg( CPlayer* thisclient, char* Format, ... )
+{
+  char buf[512];
+  va_list ap;
+  va_start( ap, Format );
+  vsprintf( buf, Format, ap );
+
+  BEGINPACKET( pak, 0x07df );
+  ADDBYTE    ( pak, 0xf1 );
+  ADDSTRING( pak, buf );
+  ADDBYTE( pak, 0x0 );
+  thisclient->client->SendPacket(&pak);
+  va_end( ap );
+  return true;
+}
 // from Paul_T
 bool CWorldServer::SendGlobalMSG( CPlayer* thisclient, char* Format, ... )
 {
@@ -47,7 +95,7 @@ bool CWorldServer::SendGlobalMSG( CPlayer* thisclient, char* Format, ... )
            BEGINPACKET( pak, 0x0784 );
            ADDSTRING( pak, thisclient->CharInfo->charname );
            ADDBYTE( pak, 0 );
-     ADDSTRING( pak, buf );
+           ADDSTRING( pak, buf );
            ADDBYTE( pak, 0 );
            SendToAll(&pak);
   va_end( ap );
@@ -546,15 +594,7 @@ whie = -15 - 20%
     return exp;
 }
 
-bool CWorldServer::SendSysMsg( CPlayer* thisclient, string message )
-{
-	BEGINPACKET( pak, 0x7df );              // GS Billing Message is used to Send System Messages.
-	ADDBYTE    ( pak, 0xf1 );
-	ADDSTRING  ( pak, message.c_str( ));
-	ADDBYTE    ( pak, 0x00 );
-	thisclient->client->SendPacket( &pak );
-    return true;
-}
+
 
 
 // teleport to specificated map and position
