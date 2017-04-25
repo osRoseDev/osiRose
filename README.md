@@ -1,5 +1,8 @@
 # osiRose
-Pre-Evo Rose Online Server Emulator
+Pre-Evo Rose Online Server Emulator.
+
+This emulator is setup to work with the 766 release of iRose, which can be found here: 
+The 766 has proven to be fast and stable.
 
 
 ## Revision History
