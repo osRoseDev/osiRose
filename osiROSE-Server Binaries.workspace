@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="osiROSE 87 Server Binaries">
-		<Project filename="Binary/Documentation+TODO/Documentation+TODO.cbp" />
 		<Project filename="Binary/CharServer.cbp" />
 		<Project filename="Binary/WorldServer.cbp" />
 		<Project filename="Binary/LoginServer.cbp" />

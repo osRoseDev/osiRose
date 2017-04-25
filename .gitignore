@@ -1,13 +1,29 @@
+#Compiler Stuff
 .\objs*
-.\Client*
-.\Temp*
+
+#-- Scratch Folders
+.\tmp*
 .\temp*
 temp*
-Binary/Objects*
+
+#-- Keep folders, ignore files.
 Binary/3DData/AI*
 Binary/3DData/STB*
 Binary/3DData/QuestData*
-*.layout
-Binary/*.layout
-*.depend
+
+#-- Keep Folder, but discard Logs
+/Binary/log/*.log
+/Binary/log/queries.txt
+/Binary/DBG-WorldServer.exe
+/Binary/DBG-CharServer.exe
+/Binary/DBG-LoginsServer.exe
+
+#-- CodeBlocks Layout files.
+/Binary/*.layout
+/Binary/*.depend
+
+#-- Any Shortcuts
 Binary/Start Client 766.lnk
+
+
+

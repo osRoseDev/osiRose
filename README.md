@@ -1,11 +1,37 @@
-# osiRose
-Pre-Evo Rose Online Server Emulator.
+osiROSE Project Readme
+=========================
+### Project Developers
+- FransK  (osrosedev@gmail.com)
+- April 2017
 
-This emulator is setup to work with the 766 release of iRose, which can be found here: 
-The 766 has proven to be fast and stable.
+**Supported Client:** SHO ( seven h )766_Setup.exe
 
 
-## Revision History
-* 87 - Upload sourcecode from '2013
-* 88 - Cleaned up + Compilable + Fix for returning to Char Select.
+This Server now works with the 766 client. Download from this Mega repository.[here](https://mega.nz/#F!8AkG3TzJ!6eoMc65tHmF_d_6nAvf8ZA)
+Get the client connected to the servers on your local workstation using this command:
+```Javascript
+TRIGGERDETECT.EXE @TRIGGER_SOFT@ _server 127.0.0.1
+```
+## Revision Log
+#### [REV 88.1] 
+* Removed all clutter from the filesystem. This project is now clean.
+#### [REV 88.1]
+* Cleaned up some more.
+#### [REV 88]
+-[x] Fixed a client crash when returning to Char Select	
 
+
+## BugList / To Do 
+This will be tracked on Github.
+
+### Worldserver
+- [x] GMCommand /transx crashes client; znzin fails. (guess: face/hairstyle not available ?)
+- [ ] Crash when using a client that has implemented shop coupouns like lRose796 
+ 
+### Char Select Server
+
+### Loginserver
+
+
+
+## Client Issues
