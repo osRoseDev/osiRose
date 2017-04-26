@@ -97,10 +97,10 @@ public:
     UINT GetUIntValue( const char* s , void* var=NULL );
     int GetIntValue( const char* s , void* var=NULL );
     char* GetStrValue( const char* s , void* var=NULL );
-    bool SendSysMsg( CPlayer* thisclient, string message );
-    bool SendSysMsg( CPlayer* thisclient, char* Format, ... );
-    bool SendSysMsg( CClientSocket* thisclient, string message );
-    bool SendSysMsg( CClientSocket* thisclient, char* Format, ... );
+    bool SendSysMsg( CPlayer* thisclient, string message );                     // The Original
+    bool SendSysMsg( CPlayer* thisclient, char* Format, ... );                  // FK: Added REV 89
+    bool SendSysMsg( CClientSocket* thisclient, string message );               // FK: Added REV 89
+    bool SendSysMsg( CClientSocket* thisclient, char* Format, ... );            // FK: Added REV 89
     UINT RandNumber( UINT init, UINT range, UINT seed=0 );
     UINT GetColorExp( UINT playerlevel,UINT moblevel, UINT exp );
     bool CheckInventorySlot( CPlayer* thisclient, int slot );

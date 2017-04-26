@@ -28,7 +28,7 @@ bool CWorldServer::SendPM( CPlayer* thisclient, char* Format, ... )
   va_start( ap, Format );
   vsprintf( buf, Format, ap );
            BEGINPACKET( pak, 0x0784 );
-           ADDSTRING( pak, "Server" );
+           ADDSTRING( pak, "[SRV]" );
            ADDBYTE( pak, 0 );
            ADDSTRING( pak, buf );
            ADDBYTE( pak, 0 );
@@ -48,6 +48,7 @@ bool CWorldServer::SendSysMsg( CClientSocket* client, string message )
 }
 bool CWorldServer::SendSysMsg( CClientSocket* client, char* Format, ... )
 {
+  // FK Added another declaration so this function can be used with CCLientSocket only.
   char buf[512];
   va_list ap;
   va_start( ap, Format );
@@ -63,6 +64,7 @@ bool CWorldServer::SendSysMsg( CClientSocket* client, char* Format, ... )
 }
 bool CWorldServer::SendSysMsg( CPlayer* thisclient, string message )
 {
+    //FK This is the original Function.
 	BEGINPACKET( pak, 0x7df );              // GS Billing Message is used to Send System Messages.
 	ADDBYTE    ( pak, 0xf1 );
 	ADDSTRING  ( pak, message.c_str( ));
@@ -72,6 +74,7 @@ bool CWorldServer::SendSysMsg( CPlayer* thisclient, string message )
 }
 bool CWorldServer::SendSysMsg( CPlayer* thisclient, char* Format, ... )
 {
+  // Changed declaration so this function can be used with variables, just like SendPM.
   char buf[512];
   va_list ap;
   va_start( ap, Format );
@@ -85,7 +88,7 @@ bool CWorldServer::SendSysMsg( CPlayer* thisclient, char* Format, ... )
   va_end( ap );
   return true;
 }
-// from Paul_T
+
 bool CWorldServer::SendGlobalMSG( CPlayer* thisclient, char* Format, ... )
 {
   char buf[512];
@@ -275,27 +278,23 @@ CDrop* CWorldServer::GetPYDrop( CMonster* thismon, UINT droptype )
 {   //if droptype = 1 then it is a normal drop. if it is 2 then it is a potential side drop.
     //Log( MSG_INFO, "PYDrops function selected" );
     //Log( MSG_INFO, "monster is %i", thismon->montype );
-    if(droptype == 2) // monster is still alive
-    {
+
+    if(droptype == 2) { // monster is still alive
         // this part of the function reserved for the later addition of side drops
-        //return NULL;  //temporary bypass for the side drop function
+        // return NULL;  //temporary bypass for the side drop function
         // kicks it straight back if the monster is not dead
         if(thismon->thisnpc->side != 0) //perhaps we get a side drop??
         {
-            if(GServer->RandNumber(0,100) < thismon->thisnpc->sidechance)
-            {
+            if(GServer->RandNumber(0,100) < thismon->thisnpc->sidechance){
                 droptype = thismon->thisnpc->side;
-            }
-            else
-            {
+            } else {
                 return NULL;  //No drop this time
             }
-        }
-        else
-        {
+        } else {
             return NULL;  //No drop this time
         }
     }
+
     CDrop* newdrop = new (nothrow) CDrop;
     if(newdrop==NULL)
     {
@@ -532,6 +531,7 @@ CDrop* CWorldServer::GetPYDrop( CMonster* thismon, UINT droptype )
         int bluechance1 = RandNumber( 1, 100);
         int bluechance2 = Config.BlueChance + chamod;
         Log( MSG_INFO, "Blue chance = %i", bluechance2);
+
         //This probability is now configurable from WorldServer.conf. CHA also has an effect
         if(bluechance1 < bluechance2) // some percentage of drops will be specials or blues whenever one is available.
         {
@@ -574,7 +574,7 @@ brown = +4 - 110%
 orange = same - 100%
 green = -4 - 80%
 blue = -9 - 50%
-whie = -15 - 20%
+white = -15 - 20%
 */
     int dif = moblevel - playerlevel;
     if(dif>15)//purple

@@ -259,6 +259,7 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         ADDWORD(pak, 0x40b3);
         thisclient->client->SendPacket(&pak);
         SendPM(thisclient, "Face changed!");
+
         DB->QExecute("UPDATE characters SET face=%i WHERE id=%i", thisclient->CharInfo->Face, thisclient->CharInfo->charid);
     }
     else if (strcmp(command, "hair")==0)
@@ -398,103 +399,6 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
 
         }
     }
-
-/*
-    else if (strcmp(command, "go")==0) // AtCommandGo
-    {
-        if (Config.Command_Go > thisclient->Session->accesslevel)
-            return true;
-        if ((tmp = strtok(NULL, " ")) == NULL) tmp = 0;
-        int loc=atoi(tmp);
-        int x = 0;
-        int y = 0;
-        int map = 0;
-        if (loc == 1)
-        {
-            map = 22;
-            x = 5749;
-            y = 5101;
-        }
-        else if (loc == 2)
-        {
-            map = 1;
-            x = 5240;
-            y = 5192;
-        }
-        else if (loc == 3)
-        {
-            map = 2;
-            x = 5516;
-            y = 5236;
-        }
-        else if (loc == 4)
-        {
-            map = 51;
-            x = 5357;
-            y = 5013;
-        }
-        else if (loc == 5)
-        {
-            map = 6;
-            x = 5243;
-            y = 5240;
-        }
-        else if (loc == 6)
-        {
-            map = 24;
-            x = 5525;
-            y = 5376;
-        }
-        else if (loc == 7)
-        {
-            map = 31;
-            x = 5516;
-            y = 5437;
-        }
-        else if (loc == 73)
-        {
-            map = 33;
-            x = 5695;
-            y = 5269;
-        }
-        else if (loc == 8)
-        {
-            map = 26;
-            x = 5681;
-            y = 5102;
-        }
-        else if (loc == 9)
-        {
-            map = 28;
-            x = 5639;
-            y = 4761;
-        }
-        else
-        {
-            SendPM(thisclient, "Please input a number after the go command, below is a list of places and their appropriate number");
-            SendPM(thisclient, "1 = Adventurers plains");
-            SendPM(thisclient, "2 = The city of Zant");
-            SendPM(thisclient, "3 = Junon Polis");
-            SendPM(thisclient, "4 = The city of Eucar");
-            SendPM(thisclient, "5 = Training grounds");
-            SendPM(thisclient, "6 = El Verloon Desert");
-            SendPM(thisclient, "7 = Goblin Cave (B1)(73(B3))");
-            SendPM(thisclient, "8 = Forest of Wisdom");
-            SendPM(thisclient, "9 = Gorge of Silence");
-            SendPM(thisclient, "Example; /go 3");
-        }
-
-        if ( (x != 0) && (y != 0) && (map != 0) )
-        {
-            fPoint coord;
-            coord.x = x;
-            coord.y = y;
-            MapList.Index[map]->TeleportPlayer( thisclient, coord, false );
-            Log( MSG_GMACTION, " %s : /go %i" , thisclient->CharInfo->charname, loc);
-        }
-        return true;
-    }
-*/
 
     //******************************* START RESPAWN ***************************
     else if (strcmp(command, "SSPAWN")==0)
@@ -1326,7 +1230,7 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
         }
         return true;
     }
-     else if(strcmp(command, "debugmode")==0)
+    else if(strcmp(command, "debugmode")==0)
     {
         if(thisclient->Session->accesslevel <= 100)
 	                    return true;
@@ -1706,6 +1610,8 @@ bool CWorldServer::pakGMCommand( CPlayer* thisclient, CPacket* P )
     }
     else if (strcmp(command, "heal")==0)
     {
+        // Function is not performing client update, although HP is set to max
+        // /mystat HP
         if (Config.Command_Heal > thisclient->Session->accesslevel)
             return true;
         Log( MSG_GMACTION, " %s : /heal", thisclient->CharInfo->charname );
