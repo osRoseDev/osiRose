@@ -1,8 +1,11 @@
-You only need to run prose.sql on your database.
-list_spawnareas.sql is for the old spawn system, 
-and is unused in the newer OSpRose releases.
+-Quick guide to setup the database:
 
-If you have MySQL installed locally (You need mysql.exe
-and mysqldump.exe) then you can run the db_installer.bat
-script to install the database tables for you. No need
-to edit it, just run it :)
+Open up your instance of MySql.
+
+1) create a new database schema; set the name to osirose.
+2) open a new query window
+3) load osirose.sql   (Everything is in here.)
+4) execute.
+
+Update the Server Binaries .conf files to match the database name, SQL username and password.
+
